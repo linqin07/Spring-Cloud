@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    launcher:
+      deployables:
+        eureka1:
+          coordinates: file://D:/IDEAWorkspace/Spring-Cloud/eureka/target/eureka-server-1.0-SNAPSHOT.jar:eureka-server-1.0-SNAPSHOT.jar
+          port: 8763
