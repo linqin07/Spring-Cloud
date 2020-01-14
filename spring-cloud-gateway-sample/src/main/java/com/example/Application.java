@@ -1,5 +1,6 @@
 package com.example;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ *
+ * 版本：
+ * Spring Cloud: Greenwich.RC2
+ * Spring Boot: 2.1.1.RELEASE
  * @Description:
  * @author: LinQin
  * @date: 2020/01/11
@@ -23,36 +28,7 @@ public class Application {
         return "This is a hello";
     }
 
-    // @Bean
-    // public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-    //     //@formatter:off
-    //     return builder.routes()
-    //                   .route("path_route", r -> r.path("/get")
-    //                                              .uri("http://httpbin.org"))
-    //                   .route("host_route", r -> r.host("*.myhost.org")
-    //                                              .uri("http://httpbin.org"))
-    //                   .route("rewrite_route", r -> r.host("*.rewrite.org")
-    //                                                 .filters(f -> f.rewritePath("/foo/(?<segment>.*)",
-    //                                                         "/${segment}"))
-    //                                                 .uri("http://httpbin.org"))
-    //                   .route("hystrix_route", r -> r.host("*.hystrix.org")
-    //                                                 .filters(f -> f.hystrix(c -> c.setName("slowcmd")))
-    //                                                 .uri("http://httpbin.org"))
-    //                   .route("hystrix_fallback_route", r -> r.host("*.hystrixfallback.org")
-    //                                                          .filters(f -> f.hystrix(c -> c.setName("slowcmd").setFallbackUri("forward:/hystrixfallback")))
-    //                                                          .uri("http://httpbin.org"))
-    //                   // .route("limit_route", r -> r
-    //                   //         .host("*.limited.org").and().path("/anything/**")
-    //                   //         .filters(f -> f.requestRateLimiter(c -> c.setRateLimiter(redisRateLimiter())))
-    //                   //         .uri("http://httpbin.org"))
-    //                   .route("websocket_route", r -> r.path("/echo")
-    //                                                   .uri("ws://localhost:9000"))
-    //                   .route("test", r -> r.path("/**")
-    //                                        // .filters()
-    //                                        .uri("http://127.0.01:8000"))
-    //                   .build();
-    //     //@formatter:on
-    // }
+
 
     // @Bean
     // RedisRateLimiter redisRateLimiter() {

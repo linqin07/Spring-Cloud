@@ -16,9 +16,11 @@ import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.HttpMessageReader;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.server.HandlerStrategies;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -26,20 +28,22 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 获取请求体
+ * 获取请求体  ModifyRequestBodyGatewayFilterFactory  预言类 ReadBodyPredicateFactory
  * @author yibo
  */
 @Slf4j
 public class RequestParamsFilter implements GlobalFilter, Ordered {
 
-
+    private final List<HttpMessageReader<?>> messageReaders = HandlerStrategies.withDefaults().messageReaders();
 
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerRequest serverRequest = new DefaultServerRequest(exchange);
+        // ServerRequest serverRequest = new DefaultServerRequest(exchange);
+        ServerRequest serverRequest = new DefaultServerRequest(exchange, messageReaders);
         // mediaType
         MediaType mediaType = exchange.getRequest().getHeaders().getContentType();
         // read & modify body
