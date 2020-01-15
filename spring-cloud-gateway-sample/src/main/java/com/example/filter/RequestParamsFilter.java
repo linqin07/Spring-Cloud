@@ -108,7 +108,7 @@ public class RequestParamsFilter implements GlobalFilter, Ordered {
 
 
     public int getOrder() {
-        return -200;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 
     private Map<String, Object> decodeBody(String body) {
