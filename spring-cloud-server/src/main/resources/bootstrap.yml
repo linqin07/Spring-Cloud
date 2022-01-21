@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: server
+  cloud:
+    config:
+      enabled: false
+      uri: ${CONFIG_SERVER_URL:http://localhost:8888}
+
+eureka:
+  client:
+    serviceUrl: #注册中心的注册地址
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+

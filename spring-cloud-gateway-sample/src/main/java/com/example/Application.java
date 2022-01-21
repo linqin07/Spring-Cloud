@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class Application {
 
+    public static final String XXX_SDFSD_20121212 = "xxx_sdfsd_20121212";
+
     @PostMapping("/hello")
     public String hystrixfallback() {
         return "This is a hello";

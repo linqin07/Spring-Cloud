@@ -7,6 +7,7 @@ spring:
     gateway:
       routes:
       - id: path_route2
+        order: 1000
         uri: http://127.0.0.1:9090
         predicates:
         - Path=/**

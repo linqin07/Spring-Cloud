@@ -1,5 +1,7 @@
 package com.example.filter;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -14,7 +16,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @Description:
@@ -33,13 +37,20 @@ public class ResponseBodyFilter implements GlobalFilter, Ordered {
             public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
                 if (body instanceof Flux) {
                     Flux<? extends DataBuffer> fluxBody = (Flux<? extends DataBuffer>) body;
-                    return super.writeWith(fluxBody.map(dataBuffer -> {
-                        // probably should reuse buffers
-                        byte[] content = new byte[dataBuffer.readableByteCount()];
-                        dataBuffer.read(content);
-                        // 释放掉内存
-                        DataBufferUtils.release(dataBuffer);
-                        String rs = new String(content, Charset.forName("UTF-8"));
+                    return super.writeWith(fluxBody.buffer().map(dataBuffers -> {
+                        // 解决返回体分段传输
+                        List<String> list = Lists.newArrayList();
+                        dataBuffers.forEach(dataBuffer -> {
+                            byte[] content = new byte[dataBuffer.readableByteCount()];
+                            dataBuffer.read(content);
+                            DataBufferUtils.release(dataBuffer);
+                            try {
+                                list.add(new String(content, "utf-8"));
+                            } catch (UnsupportedEncodingException e) {
+                                log.error("handle response error WrapperResponseFilter", e);
+                            }
+                        });
+                        String responseData = Joiner.on("").join(list);
                         // TODO 自定义操作
                         // Response response = new Response();
                         // response.setCode("1");
@@ -47,8 +58,8 @@ public class ResponseBodyFilter implements GlobalFilter, Ordered {
                         // response.setData(rs);
 
                         // byte[] newRs = JSON.toJSONString(response).getBytes(Charset.forName("UTF-8"));
-                        log.info("ResponseBody:{}", rs);
-                        byte[] newRs = rs.getBytes(Charset.forName("UTF-8"));
+                        log.info("ResponseBody:{}", responseData);
+                        byte[] newRs = responseData.getBytes(Charset.forName("UTF-8"));
                         originalResponse.getHeaders().setContentLength(newRs.length);//如果不重新设置长度则收不到消息。
                         return bufferFactory.wrap(newRs);
                     }));

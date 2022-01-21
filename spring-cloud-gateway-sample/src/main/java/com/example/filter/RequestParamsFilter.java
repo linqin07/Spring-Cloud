@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
  * @author yibo
  */
 @Slf4j
+@Deprecated
 public class RequestParamsFilter implements GlobalFilter, Ordered {
 
     private final List<HttpMessageReader<?>> messageReaders = HandlerStrategies.withDefaults().messageReaders();
